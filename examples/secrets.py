@@ -7,7 +7,7 @@
 secrets = {
     "ssid": "my access point", #Router's (AP) name
     "password": "my password", #Router's (AP) password
-    "timezone": -5,  # this is offset from UTC
+    "timezone": 0,  # this is offset from UTC, GMT
     "github_token": "abcdefghij0123456789", 
     "aio_username": "myusername", #user name for adafruit io
     "aio_key": "abcdefghij0123456789", #key for adafruit io
