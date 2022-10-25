@@ -1,7 +1,7 @@
 # WizFi360-EVB-Pico in Circuitpython (WizFi360 + RP2040)
 These code is based on Adafruit's circuitpython ESP AT control to modified. 
 
-WizFi360 Firmware version: 1.1.1.7
+WizFi360 Firmware version: 1.1.1.9
 
 If you are interested on the codes and commands, please refer to the links below.
 
@@ -11,7 +11,20 @@ If you are interested on the codes and commands, please refer to the links below
 
 3.[WizFi360 Vs ESP8266][link-AT comparison]
 
-By using WIZnet Ethernet HAT with Raspberry Pi PICO, it required simple coding to create the communication method between PICO with Adafruit IO. 
+By using WIZnet's WizFi360-EVB-PICO, it required to use AT commands to control WizFi360 to communicate to the world
+
+
+## :lotus_position_man: Upadtes
+
+### MQTT:
+
+1. Allow to change MQTT Publish topic after connected to adafruit IO
+2. Accept JSON method
+3. WizFi360 could accept Maximum 3 Subscribe topics
+
+### Library:
+1. Added Firmware upgrade for WizFi360
+2. Added Read_UART - Directly collect UART message from WizFi360 without any modification (in byte format)
 
 ## 📚Required Software
 ### Bundles:
@@ -68,8 +81,8 @@ uart = busio.UART(TX, RX, baudrate=11520, receiver_buffer_size=2048)
 2. [Adafruit io (MQTT)][link-Adafruit_io_mqtt]
 3. [Adafruit io (HTTP)][link-Adafrui_io_http] - Used the same coding method as ESP AT control
 4. [Ping][link-ping]  - Used the same coding method as ESP AT control
-
-
+5. [Blynk][link-blynk]
+6. [Adafruit io (MQTT- Multiple topics)][link-multi]
 
 [link-library]: https://github.com/ronpang/WizFi360-cpy/tree/main/lib/adafruit_espatcontrol
 [link-Thonny]: https://thonny.org/
@@ -86,3 +99,5 @@ uart = busio.UART(TX, RX, baudrate=11520, receiver_buffer_size=2048)
 [link-ping]: https://github.com/ronpang/WizFi360-cpy/blob/main/examples/Network/ping.py
 [link-lib_image]: https://github.com/ronpang/WizFi360-cpy/blob/main/img/lib%20image.PNG
 [link-secret]: https://github.com/ronpang/WizFi360-cpy/blob/main/examples/secrets.py
+[link-blynk]: https://github.com/ronpang/WizFi360-cpy/blob/main/examples/blynk/TCP%20blynk.py
+[link-multi]: https://github.com/ronpang/WizFi360-cpy/blob/main/examples/MQTT/aio_change_to_group.py

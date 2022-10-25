@@ -1,12 +1,6 @@
-# HTTP example
-This is a example code for HTTP to connect with adafruit io.
+# Firmware Upgrade
 
-The code is totally the same as ESP AT control. 
-
-If it is using SSL to post the information , it takes a longer response.
-
-## Getting start for Adafruit IO
-For applying an Adafruit account and how to use adafruit accounts, please refer to [Get start adafruit IO][link-get start]
+It is a example code to allow WizFi360-EVB-PICO user to upgrade WizFi360's Firmware.
 
 ## 🤖 Basic Setup
 ### Step 1: How to install circuit Python into WizFi360-EVB-PICO (same method as adding to Raspberry Pi Pico)
@@ -43,50 +37,25 @@ rtspin = False
 uart = busio.UART(TX, RX, baudrate=11520, receiver_buffer_size=2048)
 ```
 
-## 🔰HTTP conncection setup
-1. Required files: [aio.py][link-aio_http], [Secret.py][link-secret]
+## 🔰Firmware Upgrade
+1. Required files: [firmware upgrade.py][link-fw], [Secret.py][link-secret]
 2. Required commands:
 ```python
-# Using counter's value to send to adafruit io
-data = counter
-# HTTP feed - Topic on adafruit IO -> test
-feed = "test"
-#send the data in Json format
-payload = {"value": data}
-# The whole HTTP Post format that send to adafruit IO
-response = wifi.post(
-"https://io.adafruit.com/api/v2/" #Domain name for HTTP
-+ secrets["aio_username"] #username for adafruit IO
-+ "/feeds/" 
-+ feed  # Feed topic: test
-+ "/data",
-json=payload, #load the counter information
-headers={"X-AIO-KEY": secrets["aio_key"]}, #password for adafruit io
-)
-# Send the result and print the result
-print(response.json()) 
-# Turn of the HTTPs connection 
-response.close() 
-# Adding counter value
-counter = counter + 1 
+esp.firmware_upgrade() #firmware upgrade function - no output
+esp.get_version() #check firmware version 
 ```
 ## ☑️Results
 ### Thonny 
-The following are the results used HTTP post to post information to the adafruiit IO
+The following are the results is in debug mode
 
 ![link-thonny]
 
-### Adafruit IO 
-The result from adafruit io.
-
-![link-adafruitio]
 
 [link-readme]: https://github.com/ronpang/WizFi360-cpy
-[link-aio_http]: https://github.com/ronpang/WizFi360-cpy/blob/main/examples/http/aio_http.py
+[link-fw]: https://github.com/ronpang/WizFi360-cpy/blob/main/examples/Firmware%20upgrade/firmware%20upgrade.py
 [link-secret]: https://github.com/ronpang/WizFi360-cpy/blob/main/examples/secrets.py
 [link-linux install]: https://www.youtube.com/watch?v=onBkPkaqDnk&list=PL846hFPMqg3h4HpTVO8cPPHZnJIRA4I2p&index=3
 [link-window install]: https://www.youtube.com/watch?v=e_f9p-_JWZw&t=374s
 [link-lib_image]: https://github.com/ronpang/WizFi360-cpy/blob/main/img/lib%20image.PNG
-[link-thonny]: https://github.com/ronpang/WizFi360-cpy/blob/main/img/thonny%20result%20-%20wizfi360%20-%20HTTP.PNG
-[link-adafruitio]: https://github.com/ronpang/WizFi360-cpy/blob/main/img/adafruit%20io%20recevied%20result%20-%20wizfi360%20-%20http.PNG
-[link-get start]: https://github.com/ronpang/RP2040-HAT-CircuitPython/blob/master/examples/Adafruit_IO/Getting%20Start%20Adafruit%20IO.md
+[link-thonny]: https://github.com/ronpang/WizFi360-cpy/blob/main/img/thonny%20result%20-%20firmware%20upgrade.PNG
+

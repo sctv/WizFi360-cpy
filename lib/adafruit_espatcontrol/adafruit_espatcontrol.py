@@ -211,7 +211,7 @@ class ESP_ATcontrol:
             + ","
             + str(keepalive)
         )
-        replies = self.at_response(cmd, timeout=25, retries=retries).split(b"\r\n") #added the timeout to 25s for SSL connection
+        replies = self.at_response(cmd, timeout=25, retries=retries).split(b"\r\n")
         print (replies[0])
         for reply in replies:
             if reply == b"CONNECT":
@@ -564,7 +564,7 @@ class ESP_ATcontrol:
                             break
                     if b"ERR CODE:" in response:
                         break
-                    if b"CLOSED\r\n" in response: #it is added for MQTT disconnect to have correct feedback.
+                    if b"CLOSED\r\n" in response:
                         break
                 else:
                     self.hw_flow(True)
@@ -578,7 +578,9 @@ class ESP_ATcontrol:
             if "AT+PING" in at_cmd and b"ERROR\r\n" in response:
                 return response
             # MQTT special case, if received MQTT closed means OK
-            if "AT+MQTTDIS" in at_cmd and b"CLOSED\r\n" in response: #correct response for handling MQTT disconnect
+            if "AT+MQTTDIS" in at_cmd and b"CLOSED\r\n" in response:
+                return response
+            if "AT+CIUPDATE=" in at_cmd and b"+CIPUPDATE:1\r\n" in response:
                 return response
             if response[-4:] != b"OK\r\n":
                 time.sleep(1)
@@ -628,6 +630,7 @@ class ESP_ATcontrol:
         else:
             self.at_response("ATE0", timeout=1)
 
+
     def soft_reset(self) -> bool:
         """Perform a software reset by AT command. Returns True
         if we successfully performed, false if failed to reset"""
@@ -641,7 +644,38 @@ class ESP_ATcontrol:
         except OKError:
             pass  # fail, see below
         return False
-
+    
+    def Read_UART (self, timeout: int = 1) -> None:
+        """
+        Read from UART for checking response from WizFi360
+        
+        """
+        stamp = time.monotonic()
+        result = b''
+        while (time.monotonic() - stamp) < timeout:
+            temp = self._uart.read(1)
+            if temp != None:
+                result += temp
+        return result
+    
+    def firmware_upgrade (self) -> None:
+        
+        """
+        Upgrade wizfi360 into the latest version of firmware.
+        For more information, please refer to the link below.
+        https://github.com/wizfi/Release/tree/master/Binary
+        """
+        reply = self.at_response('AT+CIUPDATE="http://wiki.wiznet.io/download/WizFi360/O11/WizFi360_SDK.img"', timeout=1)
+        if b"+CIPUPDATE:3\r\n" in reply:
+            time.sleep(12)
+            reply = self.Read_UART()
+            if b'+CIPUPDATE:4\r\n' in reply:
+                time.sleep(7)
+                reply = self.Read_UART()
+                if b"OK\r\n" in reply:
+                    self._initialized = False
+                    
+            
     def factory_reset(self) -> None:
         """Perform a hard reset, then send factory restore settings request"""
         self.hard_reset()
